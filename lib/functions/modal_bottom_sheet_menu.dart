@@ -8,7 +8,7 @@ import 'take_image_option.dart';
 Future<File?> modalBottomSheetMenu(
     {required BuildContext context, bool isCircle = false}) async {
   File? file;
-  showModalBottomSheet(
+  return showModalBottomSheet(
     elevation: 2.0,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
