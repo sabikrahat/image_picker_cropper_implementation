@@ -5,9 +5,8 @@ import 'package:image_picker/image_picker.dart';
 
 import 'take_image_option.dart';
 
-Future<File?> modalBottomSheetMenu(
-    {required BuildContext context, bool isCircle = false}) async {
-  File? file;
+Future<File?> modalBottomSheetMenu(BuildContext context,
+    {bool isCircle = false}) async {
   return showModalBottomSheet(
     elevation: 2.0,
     shape: const RoundedRectangleBorder(
@@ -17,7 +16,7 @@ Future<File?> modalBottomSheetMenu(
       ),
     ),
     context: context,
-    builder: (builder) {
+    builder: (_) {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -35,35 +34,23 @@ Future<File?> modalBottomSheetMenu(
           ListTile(
             leading: const Icon(Icons.photo_camera),
             title: const Text('Capture Image With Camera'),
-            onTap: () async {
-              file = await takeImageOption(
-                source: ImageSource.camera,
-                isCircle: isCircle,
-              );
-              if (file != null) {
-                Navigator.pop(context, file);
-              }
-            },
+            onTap: () async => await takeImageOption(
+              source: ImageSource.camera,
+              isCircle: isCircle,
+            ).then((file) async => Navigator.pop(context, file)),
           ),
           ListTile(
             leading: const Icon(Icons.photo_library),
             title: const Text('Select Image From Gallery'),
-            onTap: () async {
-              file = await takeImageOption(
-                source: ImageSource.gallery,
-                isCircle: isCircle,
-              );
-              if (file != null) {
-                Navigator.pop(context, file);
-              }
-            },
+            onTap: () async => await takeImageOption(
+              source: ImageSource.gallery,
+              isCircle: isCircle,
+            ).then((file) async => Navigator.pop(context, file)),
           ),
           ListTile(
             leading: const Icon(Icons.cancel),
             title: const Text('Cancel'),
-            onTap: () {
-              Navigator.pop(context, file);
-            },
+            onTap: () => Navigator.pop(context, null),
           ),
         ],
       );

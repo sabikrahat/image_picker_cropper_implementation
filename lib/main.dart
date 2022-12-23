@@ -8,12 +8,12 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter Image Process',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -23,20 +23,19 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
-  _HomePageState createState() => _HomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   File? _image;
   @override
   Widget build(BuildContext context) {
-    // debugPrint('Image Build: ' + _image.toString());
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Flutter Demo'),
+        title: const Text('FlutterImage Process'),
       ),
       body: Center(
         child: _image != null
@@ -49,11 +48,8 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add_a_photo),
-        onPressed: () async {
-          _image = await modalBottomSheetMenu(context: context);
-          setState(() {});
-          debugPrint('Image Build: ' + _image.toString());
-        },
+        onPressed: () async => await modalBottomSheetMenu(context)
+            .then((pk) => setState(() => _image = pk)),
       ),
     );
   }
