@@ -1,19 +1,27 @@
-import 'dart:io';
-
+import 'package:croppy/croppy.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker_cropper_implementation/functions/modal_bottom_sheet_menu.dart';
 
-void main() {
-  runApp(const MyApp());
+import 'config/get_platform.dart';
+import 'functions/image.process/pick.photo.dart';
+import 'functions/image.widget/image.widget.dart';
+
+void main() async {
+  await _init();
+  runApp(const App());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+Future<void> _init() async {
+  pt = PlatformInfo.getCurrentPlatformType();
+  if (pt.isNotWeb) croppyForceUseCassowaryDartImpl = true;
+}
+
+class App extends StatelessWidget {
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Image Process',
+      title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -30,7 +38,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  File? _image;
+  dynamic _image;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,17 +47,17 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Center(
         child: _image != null
-            ? Image.file(
-                _image!,
+            ? SizedBox(
                 width: 300,
                 height: 300,
+                child: ImageWidget(_image!),
               )
             : const Text('No image selected.'),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add_a_photo),
-        onPressed: () async => await modalBottomSheetMenu(context)
-            .then((pk) => setState(() => _image = pk)),
+        onPressed: () async =>
+            await pickPhoto(context).then((pk) => setState(() => _image = pk)),
       ),
     );
   }
